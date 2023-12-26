@@ -3,7 +3,6 @@ import MainLayout from "../../layouts/MainLayout";
 import Ticket from "../../components/Ticket";
 import Loading from "../../components/ui/Loading";
 import { useListDocumentsQuery } from "../../store/store";
-import { TicketInterface } from "../../types/tickets";
 
 const Hero = styled.div`
   position: relative;

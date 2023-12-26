@@ -22,7 +22,7 @@ export default function CreateTicketForm({
     const image = formData.get("image") as File;
 
     let imageId;
-    if (image) {
+    if (image && image.name) {
       const { data, error } = await ticketService.createFile(image);
       if (error) {
         console.log(error);

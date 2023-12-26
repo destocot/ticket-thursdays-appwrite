@@ -20,7 +20,8 @@ export const api = createApi({
             queryFn: async ({ userId }) => {
                 const tickets = await ticketService.listDocumentsByUserId(userId);
                 return { data: tickets};
-            }
+            },
+            providesTags: [ "Tickets" ]
         }),
         getDocument: build.query<TicketInterface, { documentId: string}>({
             queryFn: async ({ documentId }) => {

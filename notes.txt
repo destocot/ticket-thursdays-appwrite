@@ -1,0 +1,112 @@
+install vite
+npm create vite@latest
+clean up files
+
+install wouter
+npm i wouter
+create signup/signin routes
+create authlayout
+create signup/signin forms
+
+install styled-components
+npm i styled-components
+style authlayout
+
+install styled-normalize
+npm i styled-normalize
+style forms
+
+setup appwrite
+setup enviroment variables
+setup auth functions
+test signin/signup
+test getAccount
+test getSession / deleteSession (signout)
+authlayout with redirect
+
+install redux toolkit
+npm i @reduxjs/toolkit
+npm i react-redux
+setup redux store
+setup redux authSlice
+
+complete auth workflow
+
+style layouts slightly
+style headers lightly
+
+reusable button
+reusable input
+
+style homepage slightly
+
+get userId
+
+setup database
+setup collection
+
+skeleton ticket
+
+ticketService
+
+queries
+all documents
+create documents
+
+get document
+
+update document
+delete document
+
+storage
+
+pictures
+previews
+deletes
+updates
+
+|| FEATURE FIXERS ||
+- BUTTONS MORE VARIANTS -
+- DATES -
+- DESIGN OVERALL -
+- HOME PAGE -
+- FOOTER -
+- ONLY SHOW YOUR OWN TICKETS -
+
+- ADMIN ROLES -
+auth teams
+table
+dashboard
+update / delete
+
+- MOBILE RESPOSIVE -
+
+|| EXTRA ||
+- PROFILES -
+
+
+
+
+
+
+
+
+
+redux counter example:
+
+import {
+  decrement,
+  increment,
+  incrementByAmount,
+} from "../../store/counterSlice";
+  const count = useSelector((state: RootState) => state.counter.value);
+  const dispatch = useDispatch();
+
+<div>
+  <h2>count: {count}</h2>
+  <button onClick={() => dispatch(increment())}>Increment</button>
+  <button onClick={() => dispatch(decrement())}>Decrement</button>
+  <button onClick={() => dispatch(incrementByAmount(2))}>
+    Increment By 2
+  </button>
+</div>

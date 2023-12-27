@@ -3,13 +3,13 @@ import { RootState, useListDocumentsQuery } from "../../store/store";
 import { useLocation } from "wouter";
 import MainLayout from "../../layouts/MainLayout";
 import { useState } from "react";
-import { Models } from "appwrite";
 import ticketService from "../../appwrite/databases";
 import Loading from "../../components/ui/Loading";
 import styled from "styled-components";
 import Button from "../../components/ui/Button";
 import DeleteTicketForm from "../../components/DeleteTicketForm";
 import UpdateTicketForm from "../../components/UpdateTicketForm";
+import { TicketInterface } from "../../types/tickets";
 
 const Table = styled.div`
   border: 1px solid #3b82f6;
@@ -129,7 +129,7 @@ const TicketRow = ({
   ticket,
   isAdmin,
 }: {
-  ticket: Models.Document;
+  ticket: TicketInterface;
   isAdmin: boolean;
 }) => {
   const [updateModal, setUpdateModal] = useState(false);

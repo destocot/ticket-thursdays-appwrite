@@ -27,6 +27,7 @@ export default function Input({
   placeholder,
   ...props
 }: InputProps) {
+  console.log(props);
   return (
     <InputStyles>
       <label>

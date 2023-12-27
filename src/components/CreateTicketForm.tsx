@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, api } from "../store/store";
 import Form from "./ui/Form";
 import { useLocation } from "wouter";
+import { FieldValues } from "react-hook-form";
 
 export default function CreateTicketForm({
   setModal,
@@ -14,16 +15,13 @@ export default function CreateTicketForm({
   const dispatch = useDispatch();
   const [, navigate] = useLocation();
 
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submit = async (formData: FieldValues) => {
     if (!userId) return;
-
-    const formData = new FormData(e.target as HTMLFormElement);
-    const image = formData.get("image") as File;
+    const { artist, date, location, venue, image } = formData;
 
     let imageId;
-    if (image && image.name) {
-      const { data, error } = await ticketService.createFile(image);
+    if (image[0] && image[0].name) {
+      const { data, error } = await ticketService.createFile(image[0]);
       if (error) {
         console.log(error);
         return;
@@ -33,11 +31,6 @@ export default function CreateTicketForm({
         imageId = data.$id;
       }
     }
-
-    const artist = formData.get("artist") as string;
-    const venue = formData.get("venue") as string;
-    const location = formData.get("location") as string;
-    const date = formData.get("date") as string;
 
     const { data, error } = await ticketService.createDocument({
       artist,

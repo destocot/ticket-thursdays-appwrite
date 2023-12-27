@@ -1,39 +1,49 @@
 import styled from "styled-components";
 import Button from "./Button";
-import Input from "./Input";
-import { FormEventHandler, useState } from "react";
-import { Models } from "appwrite";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { TicketInterface } from "../../types/tickets";
+import { useEffect, useState } from "react";
 import ticketService from "../../appwrite/databases";
 
 const Buttons = styled.div`
   margin-top: 1rem;
-  display: flex;
   gap: 1rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+`;
 
-  button:first-child {
-    flex: 1;
+const Label = styled.label`
+  input {
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+    transition: all 0.2s;
+    margin: 0.25rem 0;
+  }
+
+  input:focus {
+    outline: 0;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.2);
   }
 `;
 
-// const ImagePreview = styled.div`
-//   img {
-//     margin: 0 auto;
-//     object-fit: cover;
-//     max-width: 125px;
-//     height: auto;
-//     aspect-ratio: 1/1;
-//   }
-// `;
+const Error = styled.p`
+  color: red;
+`;
 
-const ImageInput = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+const FilePreview = styled.div`
+  position: relative;
 
   img {
+    width: 2.4rem;
+    height: auto;
     aspect-ratio: 1/1;
     object-fit: cover;
-    max-width: 100px;
+    position: absolute;
+    top: 10%;
+    right: 5%;
   }
 `;
 
@@ -43,43 +53,85 @@ export default function Form({
   ticket,
 }: {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
-  submit: FormEventHandler<HTMLFormElement>;
-  ticket?: Models.Document;
+  submit: SubmitHandler<FieldValues>;
+  ticket?: TicketInterface;
 }) {
-  const [image, setImage] = useState(
-    ticket?.image && ticketService.getFilePreview(ticket?.image)
-  );
+  const [file, setFile] = useState<string>();
+
+  useEffect(() => {
+    if (ticket?.image) {
+      setFile(ticketService.getFilePreview(ticket.image));
+    }
+  }, [ticket?.image]);
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    console.log(e.target.files);
+    if (!e.target.files) return;
+    setFile(URL.createObjectURL(e.target.files[0]));
+  }
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: {
+      artist: ticket?.artist ?? "",
+      venue: ticket?.venue ?? "",
+      location: ticket?.location ?? "",
+      date: ticket?.date.slice(0, 10) ?? "",
+      image: "",
+    },
+  });
 
   return (
-    <form onSubmit={submit}>
-      <Input label="Artist" name="artist" defaultValue={ticket?.artist} />
-      <Input label="Venue" name="venue" defaultValue={ticket?.venue} />
-      <Input label="Location" name="location" defaultValue={ticket?.location} />
-      <Input
-        label="Date"
-        type="date"
-        name="date"
-        defaultValue={ticket?.date.slice(0, 10)}
-      />
-      <ImageInput>
-        <Input
-          label="Image"
-          type="file"
-          name="image"
-          onChange={(e) => {
-            if (e.target.files) {
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                setImage(reader.result as string);
-              };
-              reader.readAsDataURL(e.target.files[0]);
-            }
-          }}
+    <form onSubmit={handleSubmit(submit)}>
+      <Label>
+        Artist
+        <input
+          type="text"
+          {...register("artist", { required: "artist is required" })}
         />
-        {image && <img src={image} alt="" />}
-      </ImageInput>
+        {errors.artist && <Error>{errors.artist.message}</Error>}
+      </Label>
+      <Label>
+        Venue
+        <input
+          type="text"
+          {...register("venue", { required: "venue is required" })}
+        />
+        {errors.venue && <Error>{errors.venue.message}</Error>}
+      </Label>
+      <Label>
+        Location
+        <input
+          type="text"
+          {...register("location", { required: "location is required" })}
+        />
+        {errors.location && <Error>{errors.location.message}</Error>}
+      </Label>
+      <Label>
+        Date
+        <input
+          type="date"
+          {...register("date", { required: "date is required" })}
+        />
+        {errors.date && <Error>{errors.date.message}</Error>}
+      </Label>
+      <Label>
+        Image
+        <FilePreview>
+          <input
+            type="file"
+            {...register("image")}
+            accept="image/png, image/jpeg, image/jpg"
+            onChange={handleFileChange}
+          />
+          <img src={file} />
+        </FilePreview>
+      </Label>
       <Buttons>
-        <Button type="submit" $variant="primary">
+        <Button type="submit" $variant="primary" disabled={isSubmitting}>
           Submit
         </Button>
         <Button onClick={() => setModal(false)}>Close</Button>

@@ -80,6 +80,9 @@ dashboard
 update / delete
 
 - MOBILE RESPOSIVE -
+placeholder
+deploy netlify
+
 
 || EXTRA ||
 - PROFILES -

@@ -14,6 +14,10 @@ const ButtonStyles = styled.button`
     background: #bfdbfe;
     border-color: #bfdbfe;
   }
+
+  &:disabled {
+    opacity: 0.5;
+  }
 `;
 
 const PrimaryButton = styled(ButtonStyles)`

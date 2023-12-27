@@ -35,6 +35,7 @@ export default function TicketDetailsPage({
   const [deleteModal, setDeleteModal] = useState(false);
 
   const userId = useSelector((state: RootState) => state.auth.userId);
+  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
 
   const { data, isLoading, isError, isUninitialized } = useGetDocumentQuery({
     documentId: params.id,
@@ -58,7 +59,7 @@ export default function TicketDetailsPage({
     <MainLayout>
       <Title>
         <h1>Ticket Details</h1>
-        {userId === data?.userId && (
+        {(isAdmin || userId === data?.userId) && (
           <Buttons>
             <Button $variant="primary" onClick={() => setUpdateModal(true)}>
               Update

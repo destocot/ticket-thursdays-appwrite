@@ -3,15 +3,14 @@ import ticketService from "../appwrite/databases";
 import Button from "./ui/Button";
 import Portal from "./ui/Portal";
 import { useLocation } from "wouter";
+import { useDispatch } from "react-redux";
+import { api } from "../store/store";
 
 const Buttons = styled.div`
   margin-top: 1rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   gap: 1rem;
-
-  button:first-child {
-    flex: 1;
-  }
 `;
 
 export default function DeleteTicketForm({
@@ -26,6 +25,7 @@ export default function DeleteTicketForm({
   setDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [location, navigate] = useLocation();
+  const dispatch = useDispatch();
 
   const handleDelete = async (ticketId: string, image: string) => {
     const { data, error } = await ticketService.deleteDocument(
@@ -40,6 +40,7 @@ export default function DeleteTicketForm({
     if (data) {
       await ticketService.deleteFile(image);
       setDeleteModal(false);
+      dispatch(api.util.invalidateTags(["Tickets"]));
       if (location !== "/admin") navigate("/tickets");
     }
   };

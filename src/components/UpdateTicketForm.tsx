@@ -3,26 +3,24 @@ import ticketService from "../appwrite/databases";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import Form from "./ui/Form";
-import { Models } from "appwrite";
+import { FieldValues } from "react-hook-form";
+import { TicketInterface } from "../types/tickets";
 
 export default function UpdateTicketForm({
   setUpdateModal,
   ticket,
 }: {
   setUpdateModal: React.Dispatch<React.SetStateAction<boolean>>;
-  ticket: Models.Document;
+  ticket: TicketInterface;
 }) {
   const userId = useSelector((state: RootState) => state.auth.userId);
 
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submit = async (formData: FieldValues) => {
     if (!userId) return;
-
-    const formData = new FormData(e.target as HTMLFormElement);
-    const image = formData.get("image") as File;
+    const { artist, date, location, venue, image } = formData;
 
     let imageId;
-    if (image.name) {
+    if (image[0] && image[0].name) {
       const { data, error } = await ticketService.createFile(image);
       if (error) {
         console.log(error);
@@ -33,11 +31,6 @@ export default function UpdateTicketForm({
         imageId = data.$id;
       }
     }
-
-    const artist = formData.get("artist") as string;
-    const venue = formData.get("venue") as string;
-    const location = formData.get("location") as string;
-    const date = formData.get("date") as string;
 
     const { data, error } = await ticketService.updateDocument(ticket.$id, {
       artist,

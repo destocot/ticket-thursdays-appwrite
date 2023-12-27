@@ -13,7 +13,7 @@ const Container = styled.div`
 
 const SubContainer = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
-  max-width: 500px;
+  max-width: 400px;
   padding: 1rem;
   border-radius: 1rem;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

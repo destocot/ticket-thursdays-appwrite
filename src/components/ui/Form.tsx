@@ -127,7 +127,7 @@ export default function Form({
             accept="image/png, image/jpeg, image/jpg"
             onChange={handleFileChange}
           />
-          <img src={file} />
+          <img src={file} alt="image preview" />
         </FilePreview>
       </Label>
       <Buttons>
